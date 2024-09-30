@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
 
 async function bootstrap() {
@@ -13,6 +14,15 @@ async function bootstrap() {
       //
     ],
   });
+
+  const config = new DocumentBuilder()
+    .setTitle('API example')
+    .setDescription('The API description')
+    .setVersion('1.0')
+    .addTag('api')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('openapi', app, document);
 
   await app.listen(3000, function() {
     console.log('App is ready at http://localhost:3000');
