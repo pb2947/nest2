@@ -10,6 +10,8 @@ async function bootstrap() {
     ],
   });
 
-  await app.listen(3000);
+  await app.listen(3000, function() {
+    console.log('App is ready at http://localhost:3000');
+  });
 }
 bootstrap();
