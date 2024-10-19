@@ -24,8 +24,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('openapi', app, document);
 
-  await app.listen(3000, function() {
-    console.log('App is ready at http://localhost:3000');
+  await app.listen(15000, function () {
+    console.log('App is ready at http://localhost:15000');
   });
 }
 bootstrap();

@@ -13,7 +13,7 @@ export class UsersService {
     private repository: Repository<User>,
   ) {}
 
-  private async checkUnique(t: any) {
+  async checkUnique(t: any) {
     const uniqueColumns = ['email', 'username'];
     for (const u of uniqueColumns) {
       const count = await this.repository.count({
@@ -62,10 +62,14 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     await this.checkUnique({ ...updateUserDto, id });
 
+    const updatingUser = { ...updateUserDto, password: updateUserDto.password };
+    if (updateUserDto.password)
+      updatingUser.password = await bcrypt.hash(updateUserDto.password, 10);
+
     await this.repository.update(
       { id: id },
       {
-        ...updateUserDto,
+        ...updatingUser,
       },
     );
     return this.findOne(id);
@@ -74,5 +78,12 @@ export class UsersService {
   async remove(id: number) {
     await this.repository.softDelete(id);
     return true;
+  }
+
+  async findOneByEmail(email: string) {
+    const user = await this.repository.findOne({
+      where: { email: email },
+    });
+    return user;
   }
 }
